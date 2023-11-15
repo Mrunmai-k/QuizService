@@ -1,6 +1,7 @@
 package com.mrunmai.quizservice.service;
 
 import com.mrunmai.quizservice.dao.QuizDao;
+import com.mrunmai.quizservice.feign.QuizInterface;
 import com.mrunmai.quizservice.model.Question;
 import com.mrunmai.quizservice.model.QuestionWrapper;
 import com.mrunmai.quizservice.model.Quiz;
@@ -20,17 +21,15 @@ public class QuizService {
     @Autowired
     QuizDao quizDao;
 
-   /* @Autowired
-    QuestionDao questionDao;*/
+    @Autowired
+    QuizInterface quizInterface;
 
     public ResponseEntity<String> createQuiz(String category, int numQ, String title) {
-/*
-        List<Question> questions = questionDao.findRandomQuestionByCategory(category, numQ);
-
+        List<Integer> questions = quizInterface.getQuestionForQuiz(category,numQ).getBody();
         Quiz quiz = new Quiz();
         quiz.setTitle(title);
-        quiz.setQuestions(questions);
-        quizDao.save(quiz);*/
+        quiz.setQuestionIds(questions);
+        quizDao.save(quiz);
         return new ResponseEntity<>("Succces", HttpStatus.CREATED);
     }
 
